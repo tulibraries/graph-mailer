@@ -14,7 +14,7 @@ class GraphMailerPlugin extends GenericPlugin
         $success = parent::register($category, $path);
 
 	if ($success && $this->getEnabled()) {
-		switch_to_graph_mail();
+		$this->switch_to_graph_mail();
 	}
         return $success;
     }
