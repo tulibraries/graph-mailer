@@ -1,10 +1,10 @@
 <?php
-namespace Tulibraries\GraphMailer;
+namespace APP\plugins\generic\graphMailer;
 
 use PKP\plugins\GenericPlugin;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Mail\MailManager;
-use InnoGE\LaravelMsGraphMail\Services;
+use InnoGE\LaravelMsGraphMail\Services\MicrosoftGraphApiService;
 
 class GraphMailerPlugin extends GenericPlugin
 {
@@ -27,7 +27,7 @@ class GraphMailerPlugin extends GenericPlugin
             clientSecret: $clientSecret,
             accessTokenTtl: $accessTokenTtl);
 
-        $manager->extend('microsoft-graph', function() use ($tenantId, $clientId, $clientSecret) {
+        $manager->extend('microsoft-graph', function() use ($service) {
             return new \Innoge\MSGraphMail\Transport\MicrosoftGraphTransport($service);
         });
 
@@ -37,4 +37,3 @@ class GraphMailerPlugin extends GenericPlugin
         return true;
     }
 }
-

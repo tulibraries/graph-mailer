@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <version>
-    <application>graphMail</application>
+    <application>graphMailer</application>
     <type>plugins.generic</type>
-    <name>GraphMailPlugin</name>
-    <version>1.0.0.0</version>
+    <class>GraphMailerPlugin</class>
+    <release>1.0.0.0</release>
     <date>2025-07-07</date>
 </version>
