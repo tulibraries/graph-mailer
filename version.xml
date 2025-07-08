@@ -2,7 +2,7 @@
 <version>
     <application>graphMailer</application>
     <type>plugins.generic</type>
-    <name>GraphMailPlugin</name>
+    <class>GraphMailerPlugin</class>
     <version>1.0.0.0</version>
     <date>2025-07-07</date>
 </version>
