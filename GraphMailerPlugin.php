@@ -2,21 +2,52 @@
 namespace APP\plugins\generic\graphMailer;
 
 use PKP\plugins\GenericPlugin;
+use PKP\config\Config;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Mail\MailManager;
 use InnoGE\LaravelMsGraphMail\Services\MicrosoftGraphApiService;
 
 class GraphMailerPlugin extends GenericPlugin
 {
-    public function register($category, $path)
+    public function register($category, $path, $mainContextId = NULL)
     {
-        parent::register($category, $path);
+        $success = parent::register($category, $path);
 
+	if ($success && $this->getEnabled()) {
+		switch_to_graph_mail();
+	}
+        return $success;
+    }
+
+    /**
+     * Provide a name for this plugin
+     *
+     * The name will appear in the Plugin Gallery where editors can
+     * install, enable and disable plugins.
+     */
+    public function getDisplayName()
+	{
+        return 'Graph Mailer';
+    }
+
+    /**
+     * Provide a description for this plugin
+     *
+     * The description will appear in the Plugin Gallery where editors can
+     * install, enable and disable plugins.
+     */
+    public function getDescription()
+	{
+        return 'Switch the default mail driver to Microsfot Graph.';
+    }
+
+
+    private function switch_to_graph_mail() {
         // Retrieve config from OJS’s config.inc.php (or env)
-        $tenantId     = $this->getSetting('azure_tenant_id');
-        $clientId     = $this->getSetting('azure_client_id');
-        $clientSecret = $this->getSetting('azure_client_secret');
-        $accessTokenTtl = $this->getSetting('azure_access_token_ttl') ?? 3000;
+        $tenantId     = Config::getVar('email', 'azure_tenant_id');
+        $clientId     = Config::getVar('email', 'azure_client_id');
+        $clientSecret = Config::getVar('email', 'azure_client_secret');
+        $accessTokenTtl = Config::getVar('email', 'azure_access_token_ttl', 3000);
 
         /** @var MailManager $manager */
         $manager = Mail::getFacadeRoot();
@@ -33,7 +64,5 @@ class GraphMailerPlugin extends GenericPlugin
 
         // Swap the default mailer
         $manager->setDefaultDriver('microsoft-graph');
-
-        return true;
     }
 }
