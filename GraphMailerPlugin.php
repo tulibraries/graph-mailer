@@ -52,7 +52,7 @@ class GraphMailerPlugin extends GenericPlugin
         /** @var MailManager $manager */
         $manager = Mail::getFacadeRoot();
 
-        $service = MicrosoftGraphApiService(
+        $service = \InnoGE\LaravelMsGraphMail\Services\MicrosoftGraphApiService(
             tenantId: $tenantId,
             clientId: $clientId,
             clientSecret: $clientSecret,
