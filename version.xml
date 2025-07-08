@@ -3,6 +3,6 @@
     <application>graphMailer</application>
     <type>plugins.generic</type>
     <class>GraphMailerPlugin</class>
-    <version>1.0.0.0</version>
+    <release>1.0.0.0</release>
     <date>2025-07-07</date>
 </version>
