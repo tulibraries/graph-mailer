@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <version>
-    <application>graphMail</application>
+    <application>graphMailer</application>
     <type>plugins.generic</type>
     <name>GraphMailPlugin</name>
     <version>1.0.0.0</version>
