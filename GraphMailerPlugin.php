@@ -6,7 +6,7 @@ use PKP\config\Config;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Mail\MailManager;
 use InnoGE\LaravelMsGraphMail\Services\MicrosoftGraphApiService;
-use InnoGE\LaravelMSGraphMail\MicrosoftGraphTransport;
+use InnoGE\LaravelMsGraphMail\MicrosoftGraphTransport;
 
 require_once(dirname(__FILE__) . '/vendor/autoload.php');
 
@@ -16,8 +16,8 @@ class GraphMailerPlugin extends GenericPlugin
     {
         $success = parent::register($category, $path);
 
-	if ($success && $this->getEnabled()) {
-		$this->switch_to_graph_mail();
+	if ($success) {
+		$this->switchToGraphMail();
 	}
         return $success;
     }
@@ -45,7 +45,7 @@ class GraphMailerPlugin extends GenericPlugin
     }
 
 
-    private function switch_to_graph_mail() {
+    private function switchToGraphMail() {
         // Retrieve config from OJS’s config.inc.php (or env)
         $tenantId     = Config::getVar('email', 'azure_tenant_id');
         $clientId     = Config::getVar('email', 'azure_client_id');
@@ -61,7 +61,7 @@ class GraphMailerPlugin extends GenericPlugin
             clientSecret: $clientSecret,
             accessTokenTtl: $accessTokenTtl);
 
-        $manager->extend('microsoft-graph', function() use ($service) {
+        $manager->extend('microsoft-graph', function($config) use ($service) {
             return new MicrosoftGraphTransport($service);
         });
 
