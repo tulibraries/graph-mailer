@@ -65,6 +65,15 @@ class GraphMailerPlugin extends GenericPlugin
             return new MicrosoftGraphTransport($service);
         });
 
+	// Inject mailer into configuration.
+	$container = \PKP\core\PKPApplication::get()->getContainer();
+	$config = $container->get('config');
+	$mailers = $config->get('mail.mailers', []);
+	$mailers['microsoft-graph'] = [
+		'transport' => 'microsoft-graph',
+	];
+	$config->set('mail.mailers', $mailers);
+
         // Swap the default mailer
         $manager->setDefaultDriver('microsoft-graph');
     }
