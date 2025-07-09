@@ -6,6 +6,9 @@ use PKP\config\Config;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Mail\MailManager;
 use InnoGE\LaravelMsGraphMail\Services\MicrosoftGraphApiService;
+use InnoGE\LaravelMSGraphMail\MicrosoftGraphTransport;
+
+require_once(dirname(__FILE__) . '/vendor/autoload.php');
 
 class GraphMailerPlugin extends GenericPlugin
 {
@@ -38,7 +41,7 @@ class GraphMailerPlugin extends GenericPlugin
      */
     public function getDescription()
 	{
-        return 'Switch the default mail driver to Microsfot Graph.';
+        return 'Switch the default mail driver to Microsoft Graph.';
     }
 
 
@@ -52,14 +55,14 @@ class GraphMailerPlugin extends GenericPlugin
         /** @var MailManager $manager */
         $manager = Mail::getFacadeRoot();
 
-        $service = \InnoGE\LaravelMsGraphMail\Services\MicrosoftGraphApiService(
+        $service = new MicrosoftGraphApiService(
             tenantId: $tenantId,
             clientId: $clientId,
             clientSecret: $clientSecret,
             accessTokenTtl: $accessTokenTtl);
 
         $manager->extend('microsoft-graph', function() use ($service) {
-            return new \Innoge\MSGraphMail\Transport\MicrosoftGraphTransport($service);
+            return new MicrosoftGraphTransport($service);
         });
 
         // Swap the default mailer
