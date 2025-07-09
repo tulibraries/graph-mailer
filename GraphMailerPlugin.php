@@ -17,11 +17,41 @@ class GraphMailerPlugin extends GenericPlugin
     {
         $success = parent::register($category, $path);
 
-	if ($success) {
+	if ($success && $this->getEnabled()) {
 		$this->switchToGraphMail();
 	}
         return $success;
     }
+
+    /**
+     * Site-wide plugins should override this function to return true.
+     *
+     * @return bool
+     */
+    public function isSitePlugin()
+    {
+        return true;
+    }
+
+    /**
+     * @copydoc Plugin::getCanEnable()
+     */
+    public function getCanEnable()
+    {
+	// Only alow Enable and Disable from Site Admin Page.
+        return $this->getCurrentContextId() == 0;
+    }
+
+
+    /**
+     * @copydoc Plugin::getCanDisable()
+     */
+    public function getCanDisable()
+    {
+	// You can disable if you can enable.
+        return $this->getCanEnable();
+    }
+
 
     /**
      * Provide a name for this plugin
@@ -30,7 +60,7 @@ class GraphMailerPlugin extends GenericPlugin
      * install, enable and disable plugins.
      */
     public function getDisplayName()
-	{
+    {
         return 'Graph Mailer';
     }
 
@@ -41,7 +71,7 @@ class GraphMailerPlugin extends GenericPlugin
      * install, enable and disable plugins.
      */
     public function getDescription()
-	{
+    {
         return 'Switch the default mail driver to Microsoft Graph.';
     }
 
