@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Mail\MailManager;
 use InnoGE\LaravelMsGraphMail\Services\MicrosoftGraphApiService;
 use InnoGE\LaravelMsGraphMail\MicrosoftGraphTransport;
+use PKP\core\PKPContainer;
 
 require_once(dirname(__FILE__) . '/vendor/autoload.php');
 
@@ -64,6 +65,15 @@ class GraphMailerPlugin extends GenericPlugin
         $manager->extend('microsoft-graph', function($config) use ($service) {
             return new MicrosoftGraphTransport($service);
         });
+
+	// Inject mailer into configuration.
+	$container = PKPContainer::getInstance();
+	$config = $container->get('config');
+	$mailers = $config->get('mail.mailers', []);
+	$mailers['microsoft-graph'] = [
+		'transport' => 'microsoft-graph',
+	];
+	$config->set('mail.mailers', $mailers);
 
         // Swap the default mailer
         $manager->setDefaultDriver('microsoft-graph');
